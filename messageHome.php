@@ -1,4 +1,13 @@
+<?php
+	session_start();
+	//获取所有的留言
+	require_once ('db.php'); 
+	require_once ('message.php');
+	$user = '';
+	if(isset($_SESSION['user']))
 
+		$user = $_SESSION['user'] ;
+?>
 <!DOCTYPE html>
 	<html>
 		<head>
@@ -11,33 +20,75 @@
 				}
 				.message-Item{
 
-					border:1px solid #0e90d2;
+					border:1px solid #eee;
+					padding:10px 20px 0px 20px;
 
 				}
 				.addMessage{
 
 					text-align: center;
 				}
+				.addMessage textarea{
+
+					width:60%;
+					height:100px;
+					border-radius:5px;
+				}
+				.message-Item-creater{
+
+					float:left;
+				}
+				.message-Item-date{
+
+					float: left;
+					margin-left:10px;
+				}
+				.deleteMessage{
+
+					float:right;
+					margin-right:10px;
+					margin-top: -15px;
+				}
+				.currentuser{
+
+					float: left;
+				}
+				.logout{
+
+					margin-left:10px;
+					float: left;
+				}
+				.head{
+
+					margin-top: 20px;
+					margin-left:100px;
+				}
 
 			</style>
 		</head>
 		<body>
+			<div class="head">
+				<?php
+					if($user != '')
+						echo "<div class='currentuser'>当前的登录用户为：$user</div><div class='logout'><a href='./login.php?action=logout'>退出</a></div>";
+					else
+						echo "<div><a href='./index.php'>登录</a></div>";
+				?>
+				<div style="clear:both"></div>
+			</div>
 			<div  class='messageHome_head'>添加留言</div>
 			<div class="addMessage">
 				<textarea rows="3" cols="20"></textarea>	
-				<div class="submit">提交</div>
+				<div class="submit">
+					<button type="button" class="btn btn-primary">登 录</button>
+				</div>
 			</div>
-			<div class='messageHome_head'>留言板的主页面</div>
+			<div class='messageHome_head' style="margin-top:20px;">留言板的主页面</div>
 			<?php
-				session_start(); 
-
-				//获取所有的留言
-				require_once ('db.php'); 
-				require_once ('message.php');
-
+				
 				$db = new db();
 
-			    $sql = "select m.id,userid,content,createdate,username from message m,user u where m.hasdel = 0 and m.userid = u.id order by createdate asc";
+			    $sql = "select m.id,userid,content,createdate,username from message m,user u where m.hasdel = 0 and m.userid = u.id order by m.createdate desc";
 
 			    $arr = $db->Query($sql);
 
@@ -67,8 +118,15 @@
 					发布时间：<?php echo $message->date;?>
 
 				</div>
+				<?php
+					
+					if($user != '' && $user == $message->username){
 
-				<div class="deleteMessage" messageid='<?php echo $message->id ?>' >删除</div>
+						echo "<div class='deleteMessage' messageid= $message->id ><img src='./img/delete.png'></div>";
+					}
+				?>
+				<div style="clear:both;"></div>
+				
 			</div>
 
 			<?php
@@ -80,7 +138,7 @@
 				$(function(){
 
 
-					$(".addMessage .submit").click(function(){
+					$(".addMessage .btn").click(function(){
 
 						//验证是否登录
 						if(valication()){
@@ -122,24 +180,27 @@
 
 						var messageid = $(this).attr("messageid");
 
-						$.ajax({         
+						if(valication()){
 
-			    				type: "POST",         
+							$.ajax({         
 
-			    				url: "./deleteMessage.php",         
+				    				type: "POST",         
 
-			    				dataType: "json",         
+				    				url: "./deleteMessage.php",         
 
-			    				data: {"messageid":messageid},         
+				    				dataType: "json",         
 
-			    				success:function(result){
+				    				data: {"messageid":messageid},         
 
-			    					alert(result.result);
+				    				success:function(result){
 
-			    					window.location.href = './messageHome.php';
+				    					alert(result.result);
 
-			    				}
-			    			});
+				    					window.location.href = './messageHome.php';
+
+				    				}
+				    			});
+						}
 
 
 					});
@@ -147,13 +208,18 @@
 
 				function valication(){
 
-					var  user = "<?php if(isset($_SESSION['user'])) echo $_SESSION['user'] ;else echo '';?>";
+					var  user = "<?php echo $user ?>";
 					
 					if(user != null && user != '')
 
 						return true;
-					else
+					else{
+
+						alert("请先登录");
+
 						return false;
+
+					}
 				}
 
 			</script>

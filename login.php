@@ -76,5 +76,5 @@ if ($action == 'login') {  //登录
 } elseif ($action == 'logout') {  //退出 
     unset($_SESSION); 
     session_destroy(); 
-    
+    echo("<script>window.location.href='./messageHome.php'</script>"); 
 }

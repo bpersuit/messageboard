@@ -68,6 +68,9 @@
 			    				}else{
 
 			    					alert("登录成功");
+
+			    					window.location.href = './messageHome.php';
+
 			    				}
 
 		    					//alert(result.message);
