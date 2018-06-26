@@ -42,6 +42,7 @@ if ($action == 'login') {  //登录
 
             $dPass = $arr[0][2];
 
+            //需要加密
            if($dPass == $pass){
 
                 $returnArr['success'] =1;

@@ -14,11 +14,19 @@
 					border:1px solid #0e90d2;
 
 				}
+				.addMessage{
+
+					text-align: center;
+				}
 
 			</style>
 		</head>
 		<body>
-			<div>添加留言</div>
+			<div  class='messageHome_head'>添加留言</div>
+			<div class="addMessage">
+				<textarea rows="3" cols="20"></textarea>	
+				<div class="submit">提交</div>
+			</div>
 			<div class='messageHome_head'>留言板的主页面</div>
 			<?php
 				session_start(); 
@@ -29,7 +37,7 @@
 
 				$db = new db();
 
-			    $sql = "select * from message where hasdel = 0 order by createdate asc";
+			    $sql = "select m.id,userid,content,createdate,username from message m,user u where m.hasdel = 0 and m.userid = u.id order by createdate asc";
 
 			    $arr = $db->Query($sql);
 
@@ -39,10 +47,7 @@
 			     	$message ->id = $v[0];
 			     	$message ->content = $v[2];
 			     	$message ->date = $v[3];
-			     	$usersql = "select username from user where id = '$v[0]'";
-
-			     	$userArr = $db->Query($usersql,1);
-			     	$message->username = $userArr[0][0];
+			     	$message->username = $v[4];
 			     	
 			?>
 			<div class="message-Item">
@@ -68,6 +73,66 @@
 			     	
 			    }
 			?>
+			<script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
+			<script>
+				$(function(){
 
+
+					$(".addMessage .submit").click(function(){
+
+						//验证是否登录
+						if(valication()){
+
+							var messageValue = $(".addMessage textarea").val();
+
+							if(messageValue == ''){
+
+								alert("输入留言信息");
+
+								return;
+							}
+
+							$.ajax({         
+
+		    				type: "POST",         
+
+		    				url: "./addMessage.php",         
+
+		    				dataType: "json",         
+
+		    				data: {"messageValue":messageValue},         
+
+		    				success:function(result){
+
+		    					console.log(result);
+		    					alert(result.result);
+
+		    				}
+		    			});
+
+
+
+
+
+
+						}
+
+
+						//
+					});
+				})
+
+				function valication(){
+
+					var  user = "<?php if(isset($_SESSION['user'])) echo $_SESSION['user'] ;else echo '';?>";
+					
+					if(user != null && user != '')
+
+						return true;
+					else
+						return false;
+				}
+
+			</script>
 		</body>
 	</html>
