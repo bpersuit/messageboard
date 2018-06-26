@@ -106,14 +106,10 @@
 
 		    					console.log(result);
 		    					alert(result.result);
+		    					window.location.href='./messageHome.php';
 
 		    				}
 		    			});
-
-
-
-
-
 
 						}
 

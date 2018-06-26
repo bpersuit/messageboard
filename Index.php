@@ -1,15 +1,5 @@
 <?PHP
 	session_start(); 
-	//echo $_SESSION['user'];
-	// include ("db.php");
-	// $db = new db();
-	// $sql = "select * from user";
-	// $arr = $db->Query($sql);
-	
- //    foreach($arr as $v){
- //        echo "{$v[0]} ";
- //    }
- //     $db->Insert("insert into user(username,password)values('persuit1','1235')");
 
 ?>
 
