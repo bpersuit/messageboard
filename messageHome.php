@@ -67,6 +67,8 @@
 					发布时间：<?php echo $message->date;?>
 
 				</div>
+
+				<div class="deleteMessage" messageid='<?php echo $message->id ?>' >删除</div>
 			</div>
 
 			<?php
@@ -94,27 +96,52 @@
 
 							$.ajax({         
 
-		    				type: "POST",         
+			    				type: "POST",         
 
-		    				url: "./addMessage.php",         
+			    				url: "./addMessage.php",         
 
-		    				dataType: "json",         
+			    				dataType: "json",         
 
-		    				data: {"messageValue":messageValue},         
+			    				data: {"messageValue":messageValue},         
 
-		    				success:function(result){
+			    				success:function(result){
 
-		    					console.log(result);
-		    					alert(result.result);
-		    					window.location.href='./messageHome.php';
+			    					console.log(result);
+			    					alert(result.result);
+			    					window.location.href='./messageHome.php';
 
-		    				}
-		    			});
+			    				}
+			    			});
 
 						}
 
+					});
 
-						//
+					$(".deleteMessage").click(function(){
+
+
+						var messageid = $(this).attr("messageid");
+
+						$.ajax({         
+
+			    				type: "POST",         
+
+			    				url: "./deleteMessage.php",         
+
+			    				dataType: "json",         
+
+			    				data: {"messageid":messageid},         
+
+			    				success:function(result){
+
+			    					alert(result.result);
+
+			    					window.location.href = './messageHome.php';
+
+			    				}
+			    			});
+
+
 					});
 				})
 

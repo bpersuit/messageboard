@@ -1,6 +1,6 @@
 <?php
 	session_start();
-
+	
 	ini_set("error_reporting","E_ALL & ~E_NOTICE");
 
 	require_once ('db.php'); 
@@ -12,9 +12,9 @@
 
 		$currentUser = $_SESSION['user'];
 
-		$messageContent = trim($_POST['messageValue']);
+		$messageId = trim($_POST['messageid']);
 
-		if($messageContent != ''){
+		if($messageId != ''){
 
 			$loginUser = "select id from user where username = '".$currentUser."'";
 
@@ -22,24 +22,23 @@
 
 			$loginUserId = $arrTmp[0][0];
 
-			$currentTime =  date('Y-m-d H:i:s');
+			//$currentTime =  date('y-m-d h:i:s',time());
 
-
+			$sql = "update message set hasdel = 1 where id = $messageId and userid = $loginUserId";
 			//还需要对于输入的内容进行转义，防止注入等等处理
 
-			$sql = "insert into message(userid,content,createdate)Value('$loginUserId','$messageContent','$currentTime')";
 
 			$result = $db->Insert($sql);
 
-			 $returnArr=array();
+			$returnArr=array();
 
-			if($result == 1){
+			if($result == true){
 
-				$returnArr['result'] = '保存成功';
+				$returnArr['result'] = '删除成功';
 
 			}else{
 
-				$returnArr['result'] = '保存失败';
+				$returnArr['result'] = '删除失败';
 
 			}
 

@@ -31,14 +31,14 @@ class db
 		    die("连接失败: " . $conn->connect_error);
 		} 
 
-		$boolean = $conn->query($sql);
+		$boolean = $conn-> query($sql);
 
 		$conn->close();
 
-    	if ($boolean === TRUE) {
+    	if ($boolean === True) {
     		return  true;
 		} else {
-    		echo "Error: " . $sql . "<br>" . $conn->error;
+    		
     		return false;
 		}
 
