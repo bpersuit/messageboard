@@ -31,5 +31,6 @@
 	for($i=0;$i<100;$i++){
   		imagesetpixel($imgRes,rand(0,$imgW),rand(0,$imgH),$color);
 	}
+	
 	imagepng($imgRes);
 	imagedestroy($imgRes);
